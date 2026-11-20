@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f0e9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Weekly Reset">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Weekly Reset</title>
+<style>
+:root{--bg:#f4f0e9;--paper:#fffdf9;--ink:#25231f;--muted:#817b72;--line:#e7e0d6;--accent:#8a7965;--soft:#eee7dd;--green:#687c68;--red:#a46e63}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:92px}
+header{padding:24px 20px 14px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:Georgia,serif;font-size:25px;letter-spacing:.02em}.sub{font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-top:4px}
+.date-pill{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:8px 11px;border-radius:30px}
+main{padding:0 16px}.page{display:none}.page.active{display:block}
+.hero{background:var(--ink);color:#fffdf9;border-radius:22px;padding:22px;margin:8px 0 18px}
+.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+.hero h1{font:26px Georgia,serif;font-weight:400;margin:8px 0}.hero p{color:#d4cec4;font-size:13px;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px}
+.stat{background:#ffffff14;border:1px solid #ffffff20;border-radius:14px;padding:11px}.stat b{display:block;font-size:19px;font-weight:500}.stat span{font-size:10px;color:#d4cec4}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 4px 11px}
+h2{font:21px Georgia,serif;font-weight:400;margin:0}h3{font-size:14px;margin:0 0 8px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.muted{color:var(--muted);font-size:12px}
+.item{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0;padding-bottom:0}.item:first-child{padding-top:0}
+.check{width:20px;height:20px;border:1px solid #b9afa2;border-radius:6px;flex:none;display:grid;place-items:center;background:transparent;color:white}.check.done{background:var(--green);border-color:var(--green)}
+.item-title{font-size:14px}.item-title.done{text-decoration:line-through;color:var(--muted)}.item-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.btn{border:0;border-radius:12px;background:var(--ink);color:white;padding:11px 14px;font-size:12px}.btn.secondary{background:var(--soft);color:var(--ink)}.btn.small{padding:7px 10px}.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.iconbtn{border:0;background:transparent;color:var(--muted);font-size:18px;padding:2px 5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:15px;min-height:105px}.tile .emoji{font-size:20px}.tile b{display:block;margin:8px 0 3px;font-size:13px}.tile span{font-size:11px;color:var(--muted)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fffdf9ed;backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:5}
+nav button{background:none;border:0;color:var(--muted);font-size:9px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}nav button span{font-size:19px}nav button.active{color:var(--ink);font-weight:700}
+.form{display:grid;gap:10px}.form label{font-size:11px;color:var(--muted);display:grid;gap:5px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;background:#fffefa;color:var(--ink);outline:none}
+textarea{min-height:70px;resize:vertical}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.list-empty{text-align:center;color:var(--muted);padding:25px 10px;font-size:13px}
+.tag{display:inline-block;background:var(--soft);padding:5px 8px;border-radius:20px;font-size:10px;color:var(--accent);margin:2px}
+.daybar{display:flex;gap:6px;overflow:auto;padding:2px 0 12px}.daybar button{flex:1;min-width:42px;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:9px 4px;font-size:11px;color:var(--muted)}.daybar button.selected{background:var(--ink);color:white;border-color:var(--ink)}
+.progress{height:6px;background:var(--soft);border-radius:9px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;background:var(--green);width:0}
+.photo{width:62px;height:62px;object-fit:cover;border-radius:12px;background:var(--soft)}
+hr{border:0;border-top:1px solid var(--line);margin:13px 0}
+.notice{font-size:11px;color:var(--muted);line-height:1.5;background:var(--soft);padding:12px;border-radius:12px;margin:12px 0}
+@media(min-width:600px){main{padding:0 24px}.grid2{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="brand">weekly reset</div><div class="sub">my personal life manager</div></div><div class="date-pill" id="todayDate"></div></header>
+<main>
+<section class="page active" id="page-today">
+<div class="hero"><div class="eyebrow">La tua giornata</div><h1 id="greeting">Buongiorno.</h1><p id="heroDate"></p><div class="stats"><div class="stat"><b id="doneCount">0/0</b><span>attività completate</span></div><div class="stat"><b id="workToday">—</b><span>turno di oggi</span></div><div class="stat"><b id="eventToday">0</b><span>eventi</span></div></div></div>
+<div class="section-head"><h2>Agenda di oggi</h2><button class="btn small secondary" onclick="openAddTask()">+ Attività</button></div>
+<div class="card" id="todayTasks"></div>
+<div class="section-head"><h2>Il tuo look</h2><button class="btn small ghost" onclick="go('outfits')">Apri outfit</button></div><div class="card" id="todayOutfit"><div class="list-empty">Nessun outfit assegnato oggi.</div></div>
+<div class="section-head"><h2>Prossimo evento</h2><button class="btn small ghost" onclick="go('social')">Social life</button></div><div class="card" id="todayEvent"><div class="list-empty">Nessun evento in programma.</div></div>
+</section>
+
+<section class="page" id="page-week">
+<div class="section-head"><h2>Weekly reset</h2><button class="btn small" onclick="resetWeek()">Nuova settimana</button></div>
+<div class="card"><div class="eyebrow">Settimana selezionata</div><h2 id="weekLabel" style="margin:7px 0 14px"></h2><div class="daybar" id="daybar"></div><div id="weekDayContent"></div></div>
+<div class="grid2">
+<div class="tile" onclick="go('work')"><div class="emoji">💼</div><b>Turni di lavoro</b><span>Programma le 30 ore</span></div>
+<div class="tile" onclick="go('fitness')"><div class="emoji">🏋️</div><b>Fitness</b><span>Routine e allenamenti</span></div>
+<div class="tile" onclick="go('outfits')"><div class="emoji">👗</div><b>Outfit</b><span>Prepara i look</span></div>
+<div class="tile" onclick="go('food')"><div class="emoji">🥗</div><b>Pasti</b><span>Menu e spesa</span></div>
+</div>
+</section>
+
+<section class="page" id="page-work">
+<div class="section-head"><h2>Work</h2><button class="btn small" onclick="openForm('shift')">+ Turno</button></div>
+<div class="hero"><div class="eyebrow">Obiettivo settimanale</div><h1><span id="workHours">0</span> / 30 ore</h1><p>Lunedì escluso dal conteggio. Tragitto previsto: 25 minuti per tratta.</p><div class="progress"><i id="workProgress"></i></div></div>
+<div id="shiftList"></div>
+</section>
+
+<section class="page" id="page-fitness">
+<div class="section-head"><h2>Fitness</h2><button class="btn small" onclick="openForm('workout')">+ Sessione</button></div>
+<div class="card"><div class="eyebrow">Routine mattutina</div><h3 style="margin-top:8px">Ogni mattina</h3>
+<div class="item"><div>🏃</div><div><div class="item-title">Corsa sul tapis roulant</div><div class="item-meta">20 minuti</div></div></div>
+<div class="item"><div>🚶</div><div><div class="item-title">Camminata veloce</div><div class="item-meta">40 minuti</div></div></div>
+<div class="item"><div>🧘</div><div><div class="item-title">Meditazione + stretching</div><div class="item-meta">11 minuti</div></div></div></div>
+<div class="notice">Le sessioni muscolari sono programmabili e modificabili. La routine cardio quotidiana è già impegnativa: alterna intensità e recupero, senza forzare ogni giorno.</div><div id="workoutList"></div>
+</section>
+
+<section class="page" id="page-outfits">
+<div class="section-head"><h2>Outfits</h2><button class="btn small" onclick="openForm('outfit')">+ Outfit</button></div>
+<div class="notice">Crea look da lavoro e serali. Puoi assegnarli a una data e collegarli agli eventi.</div><div id="outfitList"></div>
+</section>
+
+<section class="page" id="page-food">
+<div class="section-head"><h2>Food planner</h2><button class="btn small" onclick="openForm('meal')">+ Pasto</button></div><div id="mealList"></div>
+<div class="section-head"><h2>Lista della spesa</h2><button class="btn small secondary" onclick="addGrocery()">+ Articolo</button></div><div class="card" id="groceryList"></div>
+</section>
+
+<section class="page" id="page-home">
+<div class="section-head"><h2>Home management</h2><button class="btn small" onclick="openForm('home')">+ Attività</button></div><div id="homeList"></div>
+</section>
+
+<section class="page" id="page-social">
+<div class="section-head"><h2>Social life</h2><button class="btn small" onclick="openForm('event')">+ Evento</button></div><div class="notice">Uscite, cene, aperitivi, concerti e appuntamenti. Associa un outfit per avere tutto organizzato in un unico posto.</div><div id="eventList"></div>
+</section>
+
+<section class="page" id="page-settings">
+<div class="section-head"><h2>Impostazioni</h2></div>
+<div class="card"><h3>Backup dei tuoi dati</h3><p class="muted">Esporta una copia dei tuoi dati e conservala in File o iCloud Drive. Le informazioni restano su questo dispositivo/browser.</p><div class="row"><button class="btn" onclick="exportData()">Esporta backup</button><label class="btn secondary" style="display:inline-block">Importa backup<input type="file" accept="application/json" hidden onchange="importData(event)"></label></div></div>
+<div class="card"><h3>Preferenze</h3><label class="muted">Orario sveglia<input value="06:00" disabled></label><p class="muted">Sveglia di riferimento: 06:00 · Tragitto lavoro: 25 minuti · Obiettivo lavoro: 30 ore.</p></div>
+<div class="notice">Nota: questa prima versione salva i dati sul dispositivo tramite il browser. Non cancellare i dati di Safari senza prima esportare un backup. Per installare e usare la PWA offline, pubblicheremo il progetto su un hosting statico HTTPS.</div>
+</section>
+</main>
+<nav>
+<button class="active" data-go="today" onclick="go('today')"><span>⌂</span>Oggi</button>
+<button data-go="week" onclick="go('week')"><span>▦</span>Settimana</button>
+<button data-go="work" onclick="go('work')"><span>◷</span>Lavoro</button>
+<button data-go="fitness" onclick="go('fitness')"><span>♡</span>Fitness</button>
+<button data-go="social" onclick="go('social')"><span>✳</span>Social</button>
+<button data-go="settings" onclick="go('settings')"><span>⋯</span>Altro</button>
+</nav>
+</div>
+<div id="modal" style="display:none;position:fixed;inset:0;background:#17151266;z-index:10;align-items:flex-end;justify-content:center;padding:12px">
+<div style="background:var(--paper);border-radius:22px 22px 16px 16px;width:min(100%,600px);max-height:88vh;overflow:auto;padding:20px">
+<div class="row" style="margin-bottom:14px"><h2 id="modalTitle">Aggiungi</h2><button class="iconbtn" onclick="closeModal()">✕</button></div><form class="form" id="modalForm"></form>
+</div></div>
+<script src="app.js"></script>
+</body></html>
